@@ -7,15 +7,60 @@
 </head>
 <body>
 <h1>Crate Towers</h1>
+<script>
+    var config = {
+        type: Phaser.AUTO,
+        width: 640,
+        height: 960,
+        physics: {
+            default: 'matter',
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+    
+    var game = new Phaser.Game(config);
+    
+    function preload ()
+    {
+        this.load.image('air', '/assets/air.png');
+        this.load.image('box', '/assets/box.png');
+        this.load.image('dirt', '/assets/dirt.png');
+        this.load.image('dirt2', '/assets/dirt2.png');
+        this.load.image('grass', '/assets/grass.png');
+        this.load.image('grass2', '/assets/grass2.png');
+
+    }
 
 
+    function create ()
+    {
+        var air = this.add.image(400, 300, 'air');
+        air.displayWidth = game.config.width*2;
+        air.displayHeight = game.config.height*2;
 
-<h1>
-homework make images and play sound(get oof sound)
-</h1>
+        var dirt2 = this.add.image(320, 960, 'dirt2');
+        dirt2.displayWidth = game.config.width*.5;
+        dirt2.displayHeight = game.config.height*.6;
 
+        var grass2 = this.add.image(320, 700, 'grass2');
+        grass2.displayWidth = game.config.width*.5;
 
+    }
 
+    function update ()
+    {
+        
+    }
+
+</script>
+<audio id="wow">
+        <source src="assets/wow2.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
 
 </body>
 </html>
