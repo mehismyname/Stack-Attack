@@ -8,6 +8,9 @@
 <body>
 <h1>Crate Towers</h1>
 <script>
+    var timer = 120;
+    var timerText;
+
     var config = {
         type: Phaser.AUTO,
         width: 640,
@@ -35,9 +38,18 @@
 
     }
 
+    function countDown () {
+
+        timer = timer - 1;
+        
+        timerText.setText('Time: ' + timer);
+
+    };
+
 
     function create ()
     {
+
         var air = this.add.image(400, 300, 'air');
         air.displayWidth = game.config.width*2;
         air.displayHeight = game.config.height*2;
@@ -48,12 +60,25 @@
 
         var grass2 = this.add.image(320, 700, 'grass2');
         grass2.displayWidth = game.config.width*.5;
+ 
+        
+        var clock = this.time.addEvent({repeat: 119, delay: 1, callback: countDown});
+
+        
+        timerText = this.add.text(16, 16, 'time: 120', { fontSize: '32px', fill: '#000' }); 
+
+
 
     }
 
     function update ()
     {
-        
+        if (timer  < 1)
+        {
+            
+            alert('game over');
+
+        };
     }
 
 </script>
