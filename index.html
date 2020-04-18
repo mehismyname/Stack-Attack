@@ -8,7 +8,7 @@
 <body>
 <h1>Crate Towers</h1>
 <script>
-    var timer = 120;
+    var timer = 300;
     var timerText;
 
     var config = {
@@ -35,6 +35,7 @@
         this.load.image('dirt2', '/assets/dirt2.png');
         this.load.image('grass', '/assets/grass.png');
         this.load.image('grass2', '/assets/grass2.png');
+        this.load.image('box', '/assets/box.png')
 
     }
 
@@ -50,6 +51,8 @@
     function create ()
     {
 
+    
+
         var air = this.add.image(400, 300, 'air');
         air.displayWidth = game.config.width*2;
         air.displayHeight = game.config.height*2;
@@ -61,12 +64,22 @@
         var grass2 = this.add.image(320, 700, 'grass2');
         grass2.displayWidth = game.config.width*.5;
  
+        this.player =  this.add.image(30, 100, 'box');
         
-        var clock = this.time.addEvent({repeat: 119, delay: 1, callback: countDown});
+        var clock = this.time.addEvent({repeat: 299, delay: 10, callback: countDown});
 
         
-        timerText = this.add.text(16, 16, 'time: 120', { fontSize: '32px', fill: '#000' }); 
+        timerText = this.add.text(16, 16, 'time: 300', { fontSize: '32px', fill: '#000' }); 
 
+        this.tweens.add({
+            targets: this.player,
+            x:610,
+            duration:1200,
+            ease:'Expo.Solid',
+            repeat:-1,
+            yoyo:true,
+
+        });
 
 
     }
@@ -75,11 +88,9 @@
     {
         if (timer  < 1)
         {
-            
             alert('game over');
-
         };
-    }
+    };
 
 </script>
 <audio id="wow">
