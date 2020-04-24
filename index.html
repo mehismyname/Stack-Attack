@@ -29,13 +29,13 @@
     
     function preload ()
     {
-        this.load.image('air', '/assets/air.png');
-        this.load.image('box', '/assets/box.png');
-        this.load.image('dirt', '/assets/dirt.png');
-        this.load.image('dirt2', '/assets/dirt2.png');
-        this.load.image('grass', '/assets/grass.png');
-        this.load.image('grass2', '/assets/grass2.png');
-        this.load.image('box', '/assets/box.png')
+        this.load.image('air', 'assets/air.png');
+        this.load.image('box', 'assets/box.png');
+        this.load.image('dirt', 'assets/dirt.png');
+        this.load.image('dirt2', 'assets/dirt2.png');
+        this.load.image('grass', 'assets/grass.png');
+        this.load.image('grass2', 'assets/grass2.png');
+        this.load.image('box', 'assets/box.png')
 
     }
 
@@ -66,7 +66,7 @@
  
         this.player =  this.add.image(30, 100, 'box');
         
-        var clock = this.time.addEvent({repeat: 299, delay: 10, callback: countDown});
+        var clock = this.time.addEvent({repeat: 299, delay: 1000, callback: countDown});
 
         
         timerText = this.add.text(16, 16, 'time: 300', { fontSize: '32px', fill: '#000' }); 
@@ -93,10 +93,5 @@
     };
 
 </script>
-<audio id="wow">
-        <source src="assets/wow2.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-
 </body>
 </html>
