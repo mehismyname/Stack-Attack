@@ -27,9 +27,11 @@
     };
     
     var game = new Phaser.Game(config);
+    var falling = false;
     
     function preload ()
     {
+        this.load.audio('hit', 'assets/hit.wav')
         this.load.image('air', 'assets/air.png');
         this.load.image('box', 'assets/box.png');
         this.load.image('dirt', 'assets/dirt.png');
@@ -48,7 +50,8 @@
 
     };
 
-
+    var phaser;
+    
     function create ()
     {
 
@@ -64,13 +67,17 @@
         dirt2.displayWidth = game.config.width*.5;
         dirt2.displayHeight = game.config.height*.6;
 
-        var grass2 = this.matter.add.image(320, 700, 'grass2', null, {isStatic: true});
+        var grass2 = this.matter.add.image(320, 700, 'grass2', null, {id: 'visible-grass', isStatic: true});
         grass2.displayWidth = game.config.width*.5;
- 
-        this.player =  this.matter.add.image(30, 100, 'box');
-        this.player.setIgnoreGravity(true);
-        this.player.setBounce(1);
+
         
+        var grass = this.matter.add.image(320, 1500, 'grass', null, {id: 'invisible-platform', isStatic: true});
+        grass.displayWidth = game.config.width*2;
+ 
+        this.player = this.matter.add.image(30, 100, 'box');
+        this.player.setIgnoreGravity(true);
+        this.player.setBounce(0);
+
         var clock = this.time.addEvent({repeat: 119, delay: 10000000, callback: countDown});
 
         
@@ -87,18 +94,51 @@
 
         });
 
+        phaser =this;
         this.matter.world.on('collisionstart', function(event, thingA, thingB) {
-             console.log('hit')
-            console.count('bounces')
+             console.count('hit');
+             console.log(thingA, thingB);
+             if (thingA.id == 'visible-grass') {
+                console.count('hit');
+                
+             }; 
+             if (thingA.id == 'invisible-platform') {
+                console.count('fall or miss');
+                thingB.gameObject.destroy();
+            };
+            if (falling) {
+
+                phaser.player = phaser.matter.add.image(30, 100, 'box');
+                phaser.player.setIgnoreGravity(true);
+
+                tween = phaser.tweens.add({
+                    targets: phaser.player,
+                    x:610,
+                    duration:1200,
+                    ease:'Expo.Solid',
+                    repeat:-1,
+                    yoyo:true,
+
+                });
+
+                falling = false;
+                var hitSound = phaser.sound.add('hit');
+                hitSound.play();
+            }
+             
         });
+    
     }
 
     function update ()
     {
         if (this.cursors.space.isDown)
         {
-            this.player.setIgnoreGravity(false);
+            falling = true;
             tween.stop();
+            this.player.setIgnoreGravity(false);
+            
+            
         }
 
 
