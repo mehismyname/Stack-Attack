@@ -1,17 +1,20 @@
 <html>
 <head>
 <title>Stack The Blocks</title>
-
 <script src ="https://cdn.jsdelivr.net/npm/phaser@3.22.0/dist/phaser.min.js"></script>
-
 </head>
 <body>
 <h1>Crate Towers</h1>
 <script>
     var timer = 120;
     var timerText;
+    var score = 0;
+    var scoreText;
+    var boxes;
     var tween;
-
+    function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+    };
     var config = {
         type: Phaser.AUTO,
         width: 640,
@@ -24,11 +27,9 @@
             create: create,
             update: update
         }
-    };
-    
+    };   
     var game = new Phaser.Game(config);
-    var falling = false;
-    
+    var falling = false;   
     function preload ()
     {
         this.load.audio('hit', 'assets/hit.wav')
@@ -39,51 +40,32 @@
         this.load.image('grass', 'assets/grass.png');
         this.load.image('grass2', 'assets/grass2.png');
         this.load.image('box', 'assets/box.png')
-
     }
-
     function countDown () {
-
-        timer = timer - 1;
-        
+        timer = timer - 1;       
         timerText.setText('Time: ' + timer);
-
     };
-
     var phaser;
-    
     function create ()
     {
-
     this.cursors = this.input.keyboard.createCursorKeys();
-
         var air = this.add.image(400, 300, 'air');
         air.displayWidth = game.config.width*2;
         air.displayHeight = game.config.height*2;
-
-
-
         var dirt2 = this.add.image(320, 960, 'dirt2');
         dirt2.displayWidth = game.config.width*.5;
         dirt2.displayHeight = game.config.height*.6;
-
         var grass2 = this.matter.add.image(320, 700, 'grass2', null, {id: 'visible-grass', isStatic: true});
-        grass2.displayWidth = game.config.width*.5;
-
-        
+        grass2.displayWidth = game.config.width*.5;      
         var grass = this.matter.add.image(320, 1500, 'grass', null, {id: 'invisible-platform', isStatic: true});
         grass.displayWidth = game.config.width*2;
- 
         this.player = this.matter.add.image(30, 100, 'box');
         this.player.setIgnoreGravity(true);
         this.player.setBounce(0);
-
-        var clock = this.time.addEvent({repeat: 119, delay: 10000000, callback: countDown});
-
-        
+        var score = 10;
+        var clock = this.time.addEvent({repeat: 119, delay: 1000, callback: countDown});     
         timerText = this.add.text(16, 16, 'time: 120', { fontSize: '32px', fill: '#000' }); 
-
-
+        scoreText = this.add.text(200, 16, 'score: 0', { fontSize: '32px', fill: '#000' }); 
         tween = this.tweens.add({
             targets: this.player,
             x:610,
@@ -93,24 +75,22 @@
             yoyo:true,
 
         });
-
         phaser =this;
         this.matter.world.on('collisionstart', function(event, thingA, thingB) {
-             console.count('hit');
              console.log(thingA, thingB);
              if (thingA.id == 'visible-grass') {
                 console.count('hit');
-                
              }; 
              if (thingA.id == 'invisible-platform') {
-                console.count('fall or miss');
+                console.count('fall or miss'); 
                 thingB.gameObject.destroy();
+                 score = score - 15;
             };
             if (falling) {
-
+                scoreText.setText('score: ' + score);
                 phaser.player = phaser.matter.add.image(30, 100, 'box');
+                score = score + 10;
                 phaser.player.setIgnoreGravity(true);
-
                 tween = phaser.tweens.add({
                     targets: phaser.player,
                     x:610,
@@ -118,17 +98,14 @@
                     ease:'Expo.Solid',
                     repeat:-1,
                     yoyo:true,
-
                 });
-
                 falling = false;
                 var hitSound = phaser.sound.add('hit');
                 hitSound.play();
             }
-             
         });
     
-    }
+    };
 
     function update ()
     {
@@ -139,12 +116,13 @@
             this.player.setIgnoreGravity(false);
             
             
-        }
-
+        };
 
         if (timer  < 1)
         {
             alert('game over');
+            alert('Saving Score');
+            location.reload();
         };
     };
 
